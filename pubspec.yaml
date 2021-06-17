@@ -1,7 +1,7 @@
 name: custom_picker
 description: A Flutter Package that provides you an beautified alternative of Dropdown widget.
 version: 0.0.1
-homepage:
+homepage: https://github.com/dubey2k/custom_picker
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
