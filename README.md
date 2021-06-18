@@ -11,6 +11,11 @@ dependencies:
   custom_picker: <latest_version>
 ```
 
+
+## Output
+![custom_picker](https://github.com/dubey2k/custom_picker/blob/master/example/output/output.gif)
+
+
 ## Usage
 
 You can use multiple text beautification options with detected text formats.
