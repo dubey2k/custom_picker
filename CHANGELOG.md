@@ -6,7 +6,9 @@
 
 ## 0.0.2
 
-- Updated Documention
 - Added more Customization in Text of Pop Up Menu
 - Added more Decoration options
 
+
+## 0.0.3
+- Updated Documention

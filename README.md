@@ -83,7 +83,7 @@ CustomPicker(
 |   parameter        |      description                                                                                     |  default                                 |
 | ------------------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 |   popupHeight      |     The height of the popup                                                                          |  400                                     |
-|   optionLoop       |     List<bool> which child to loop over wheel                                                        |  true for all children                   |
+|   optionLoop       |     List of boolswhich child to loop over wheel                                                      |  true for all children                   |
 |   below            |     show popup widget below the [CustomPicker]                                                       |  Color(0xFF424242)                       |
 |   popUpDecoration  |     The FontWeight of UnDetected Text                                                                |  radius : 10, border: Color(0xFF424242)  |
 |   verticalOffset   |     vertical position of popup widget                                                                |  TextAlign.start                         |
@@ -95,7 +95,7 @@ CustomPicker(
 |   handleChange     |     any change in any child will call this method                                                    |  void                                    |
 |   popUpMargin      |     Margin for PopUp Widget (if it is zero, pop up widget will be visible at the center of picker)   |  hor = 20 , ver =20                      |
 |   onCancel         |     Whenever the user cancels when changing the date.                                                |  void                                    |
-|   list             |     List<List<dynamic>> List of Lists of Options to be displayed on pop up widget                    |  required                                |
+|   list             |     List of Lists of Options to be displayed on pop up widget                                        |  required                                |
 |   wtList           |     List<int> flex propertry of visible widget items                                                 |  equal for each child                    |
 |   contentPadding   |     The padding of the picker widget                                                                 |  zero                                    |
 |   widDecoration    |     BoxDecoration for visible widget                                                                 |  BoxDecoration()                         |
