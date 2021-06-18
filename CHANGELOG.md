@@ -12,3 +12,7 @@
 
 ## 0.0.3
 - Updated Documention
+
+## 0.0.4
+- added more customizations
+- Updated Documention
