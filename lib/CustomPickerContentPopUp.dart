@@ -16,6 +16,7 @@ class CustomPickerContentPopUp extends StatefulWidget {
     this.popUpMargin,
     this.popUpSelColor,
     this.popUpDecoration,
+    this.popUpTextStyle,
   }) : super(key: key);
 
   final bool? yesNo;
@@ -30,6 +31,7 @@ class CustomPickerContentPopUp extends StatefulWidget {
   final List<List<dynamic>> data;
   final Color? popUpSelColor;
   final Decoration? popUpDecoration;
+  final List<TextStyle>? popUpTextStyle;
 
   @override
   CustomPickerContentPopUpState createState() =>
@@ -41,6 +43,8 @@ class CustomPickerContentPopUpState extends State<CustomPickerContentPopUp> {
   Widget build(BuildContext context) {
     bool loop = (widget.optionLoop != null &&
         widget.optionLoop?.length == widget.selected.length);
+    bool style = (widget.popUpTextStyle != null &&
+        widget.popUpTextStyle?.length == widget.selected.length);
     final divider = VerticalDivider(
       color: Color(0xFFB9B6B6),
       thickness: 2,
@@ -59,92 +63,98 @@ class CustomPickerContentPopUpState extends State<CustomPickerContentPopUp> {
               color: const Color(0xFFB9B6B6),
             ),
           ),
-      child: Column(children: [
-        Expanded(
-          child: Stack(
-            children: [
-              Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 40,
-                  color: widget.popUpSelColor ?? Colors.white,
+      child: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 40,
+                    color: widget.popUpSelColor ?? Colors.white,
+                  ),
                 ),
-              ),
-              Row(
-                children: List.generate(
-                  widget.data.length,
-                  (index) {
-                    bool looping = loop ? widget.optionLoop![index] : true;
-                    return Expanded(
-                      flex: 2,
-                      child: ListWheelScrollView.useDelegate(
-                        controller: widget.controllers[index],
-                        itemExtent: 40,
-                        diameterRatio: 10,
-                        renderChildrenOutsideViewport: false,
-                        physics: const FixedExtentScrollPhysics(),
-                        childDelegate: looping
-                            ? ListWheelChildLoopingListDelegate(
-                                children: List.generate(
-                                  widget.data[index].length,
-                                  (ind) {
-                                    final text = "${widget.data[index][ind]}";
-                                    return Center(
-                                      child: Text(
-                                        text,
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                    );
-                                  },
+                Row(
+                  children: List.generate(
+                    widget.data.length,
+                    (index) {
+                      bool looping = loop ? widget.optionLoop![index] : true;
+                      TextStyle styled = style
+                          ? widget.popUpTextStyle![index]
+                          : TextStyle(fontSize: 17);
+                      return Expanded(
+                        flex: 2,
+                        child: ListWheelScrollView.useDelegate(
+                          controller: widget.controllers[index],
+                          itemExtent: 40,
+                          diameterRatio: 10,
+                          renderChildrenOutsideViewport: false,
+                          physics: const FixedExtentScrollPhysics(),
+                          childDelegate: looping
+                              ? ListWheelChildLoopingListDelegate(
+                                  children: List.generate(
+                                    widget.data[index].length,
+                                    (ind) {
+                                      final text = "${widget.data[index][ind]}";
+                                      return Center(
+                                        child: Text(
+                                          text,
+                                          style: styled,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : ListWheelChildListDelegate(
+                                  children: List.generate(
+                                    widget.data[index].length,
+                                    (ind) {
+                                      final text = "${widget.data[index][ind]}";
+                                      return Center(
+                                        child: Text(
+                                          text,
+                                          style: styled,
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              )
-                            : ListWheelChildListDelegate(
-                                children: List.generate(
-                                  widget.data[index].length,
-                                  (ind) {
-                                    final text = "${widget.data[index][ind]}";
-                                    return Center(
-                                      child: Text(
-                                        text,
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                        onSelectedItemChanged: (change) {
-                          widget.selected[index] = change;
-                          widget.handleChanged(widget.selected);
-                          setState(() {});
-                        },
-                      ),
-                    );
-                  },
+                          onSelectedItemChanged: (change) {
+                            widget.selected[index] = change;
+                            widget.handleChanged(widget.selected);
+                            setState(() {});
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        widget.yesNo!
-            ? Divider(
-                color: Color(0xFFB9B6B6),
-                thickness: 2,
-                height: 0,
-              )
-            : SizedBox(),
-        widget.yesNo!
-            ? YesNoPickerControl(
-                onChanged: () {
-                  Navigator.pop(context);
-                  widget.onChanged.call();
-                },
-                onCancel: () {
-                  Navigator.pop(context);
-                  widget.onCancel();
-                },
-              )
-            : SizedBox(),
-      ]),
+          widget.yesNo!
+              ? Divider(
+                  color: widget.popUpSelColor ?? Color(0xFFB9B6B6),
+                  thickness: 1.5,
+                  height: 0,
+                )
+              : SizedBox(),
+          widget.yesNo!
+              ? YesNoPickerControl(
+                  color: widget.popUpSelColor,
+                  onChanged: () {
+                    Navigator.pop(context);
+                    widget.onChanged.call();
+                  },
+                  onCancel: () {
+                    Navigator.pop(context);
+                    widget.onCancel();
+                  },
+                )
+              : SizedBox(),
+        ],
+      ),
     );
   }
 }

@@ -19,7 +19,7 @@ class CustomPicker extends StatefulWidget {
     this.contentPadding = const EdgeInsets.all(0),
     this.popupHeight = 400,
     this.divColor = const Color(0xFFB9B6B6),
-    this.wtList = const [1, 1, 1],
+    this.wtList,
     this.widDecoration = const BoxDecoration(),
     this.childDecoration = const [],
     this.widHeight = 40,
@@ -27,6 +27,8 @@ class CustomPicker extends StatefulWidget {
     this.popUpMargin,
     this.popUpSelColor,
     this.popUpDecoration,
+    this.popUpTextStyle,
+    this.widTextStyle,
   }) : assert((list.length == selected.length &&
                 selected.length == childDecoration.length) ||
             (list.length == selected.length &&
@@ -41,11 +43,17 @@ class CustomPicker extends StatefulWidget {
   /// show popup widget below the [CustomPicker]
   final bool below;
 
-  /// The current selected list.
+  /// initially selected list
   final List<int> selected;
 
   /// whether to show yes no dialog
   final bool yesNo;
+
+  /// add TextStyle of popup children
+  final List<TextStyle>? popUpTextStyle;
+
+  /// add TextStyles of Picker Children
+  final List<TextStyle>? widTextStyle;
 
   /// Whenever the current date is changed. If this is null, the picker is considered disabled
   final ValueChanged<List<int>> onChanged;
@@ -63,7 +71,7 @@ class CustomPicker extends StatefulWidget {
   final List<List<dynamic>> list;
 
   ///List<int> flex propertry of visible widget items
-  final List<int> wtList;
+  final List<int>? wtList;
 
   /// The padding of the picker
   final EdgeInsetsGeometry contentPadding;
@@ -152,6 +160,8 @@ class _CustomPickerState extends State<CustomPicker> {
 
   @override
   Widget build(BuildContext context) {
+    bool style = (widget.widTextStyle != null) &&
+        (widget.widTextStyle?.length == widget.selected.length);
     Widget picker = MaterialButton(
         onPressed: () async {
           await popupKey.currentState?.openPopup();
@@ -170,31 +180,40 @@ class _CustomPickerState extends State<CustomPicker> {
               children: List.generate(
                 widget.list.length,
                 (index) {
+                  TextStyle styled =
+                      style ? widget.widTextStyle![index] : TextStyle();
                   return Expanded(
-                    flex: widget.wtList[index],
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Center(
+                    flex: widget.wtList == null ? 1 : widget.wtList![index],
+                    child: Padding(
+                      padding: widget.contentPadding,
+                      child: Row(
+                        children: [
+                          Expanded(
                             child: Container(
                               decoration: widget.childDecoration != null &&
                                       widget.childDecoration.length > 0
                                   ? widget.childDecoration[index]
                                   : BoxDecoration(),
-                              padding: widget.contentPadding,
-                              child: Text(
-                                  '${widget.list[index][widget.selected[index]]}'),
+                              child: Center(
+                                child: Text(
+                                  '${widget.list[index][widget.selected[index]]}',
+                                  style: styled,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        index != widget.list.length - 1
-                            ? VerticalDivider(
-                                color: widget.divColor,
-                                thickness: 2,
-                                width: 0,
-                              )
-                            : SizedBox(),
-                      ],
+                          SizedBox(
+                              width: index != widget.list.length - 1 ? 15 : 0),
+                          index != widget.list.length - 1
+                              ? VerticalDivider(
+                                  color: widget.divColor,
+                                  thickness: 1.5,
+                                  width: 0,
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -210,6 +229,7 @@ class _CustomPickerState extends State<CustomPicker> {
         popUpMargin: widget.popUpMargin,
         popUpSelColor: widget.popUpSelColor,
         height: widget.popupHeight,
+        popUpTextStyle: widget.popUpTextStyle,
         popUpDecoration: widget.popUpDecoration,
         selected: sel,
         data: widget.list,
