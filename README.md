@@ -1,7 +1,7 @@
 # custom_dropdown
 
 A Flutter Package that provides you an beautified alternative of Dropdown widget.
-It is highly Customizable in terms of size, color, style, etc.
+It is highly Customisable in terms of size, color, style, etc.
 
 
 ## Import
